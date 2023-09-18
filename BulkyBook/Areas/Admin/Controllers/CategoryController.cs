@@ -1,37 +1,39 @@
 ﻿using Bulky.DataAccess.Data;
+using Bulky.DataAccess.Repositories;
 using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace BulkyBook.Controllers
+namespace BulkyBook.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _db = db;   
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            List<Category> categories = await  _db.Categories.ToListAsync();
+            List<Category> categories = _unitOfWork.CategoryRepository.GetAll().ToList();
 
             return View(categories);
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Category category)
+        public IActionResult Create(Category category)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-               await _db.Categories.AddAsync(category);
-                await _db.SaveChangesAsync();
+                _unitOfWork.CategoryRepository.Add(category);
+                _unitOfWork.Save();
                 TempData["success"] = "Category Created Successfully";
                 return RedirectToAction("Index");
             }
@@ -40,11 +42,11 @@ namespace BulkyBook.Controllers
 
         // Update 
 
-        public async Task<IActionResult> Update(int? id)
+        public IActionResult Update(int? id)
         {
             if (id == null || id <= 0) return BadRequest();
 
-            Category category = await  _db.Categories.FindAsync(id);
+            Category category = _unitOfWork.CategoryRepository.Get(c => c.CategoryId == id);
 
             if (category == null) return NotFound();
 
@@ -52,13 +54,13 @@ namespace BulkyBook.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Category category)
+        public IActionResult Update(Category category)
         {
             if (ModelState.IsValid)
             {
 
-                 _db.Categories.Update(category);
-                await _db.SaveChangesAsync();
+                _unitOfWork.CategoryRepository.Update(category);
+                _unitOfWork.Save();
                 TempData["success"] = "Category Updated Successfully";
                 return RedirectToAction("Index");
             }
@@ -67,11 +69,11 @@ namespace BulkyBook.Controllers
 
         // Delete 
 
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null || id <= 0) return BadRequest();
 
-            Category category = await _db.Categories.FindAsync(id);
+            Category category = _unitOfWork.CategoryRepository.Get(c => c.CategoryId == id);
 
             if (category == null) return NotFound();
 
@@ -80,16 +82,16 @@ namespace BulkyBook.Controllers
 
         [HttpPost]
         [ActionName("Delete")]
-        public async Task<IActionResult> DeletePost(int? id)
+        public IActionResult DeletePost(int? id)
         {
             if (id == null || id <= 0) return BadRequest();
 
-            Category category = await _db.Categories.FindAsync(id);
+            Category category = _unitOfWork.CategoryRepository.Get(c => c.CategoryId == id);
 
             if (category == null) return NotFound();
 
-            _db.Categories.Remove(category);
-           await _db.SaveChangesAsync();
+            _unitOfWork.CategoryRepository.Remove(category);
+            _unitOfWork.Save();
             TempData["success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
         }
