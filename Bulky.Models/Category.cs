@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BulkyBook.Models
+namespace Bulky.Models
 {
     public class Category
     {
@@ -12,8 +12,8 @@ namespace BulkyBook.Models
         [DisplayName("Category Name")]
         public string CategoryName { get; set; }
 
-        [Required(ErrorMessage ="Display order is a required field")]
-        [Range(1,200)]
+        [Required(ErrorMessage = "Display order is a required field")]
+        [Range(1, 200)]
         [DisplayName("Display Order")]
         public int DisplayOrder { get; set; }
     }

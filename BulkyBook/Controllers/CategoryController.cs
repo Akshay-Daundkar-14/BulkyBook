@@ -1,5 +1,5 @@
-﻿using BulkyBook.Data;
-using BulkyBook.Models;
+﻿using Bulky.DataAccess.Data;
+using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +32,7 @@ namespace BulkyBook.Controllers
             {
                await _db.Categories.AddAsync(category);
                 await _db.SaveChangesAsync();
+                TempData["success"] = "Category Created Successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -58,6 +59,7 @@ namespace BulkyBook.Controllers
 
                  _db.Categories.Update(category);
                 await _db.SaveChangesAsync();
+                TempData["success"] = "Category Updated Successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -88,6 +90,7 @@ namespace BulkyBook.Controllers
 
             _db.Categories.Remove(category);
            await _db.SaveChangesAsync();
+            TempData["success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
         }
 
