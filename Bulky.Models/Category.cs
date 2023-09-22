@@ -6,7 +6,7 @@ namespace Bulky.Models
     public class Category
     {
         [Key]
-        public int CategoryId { get; set; }
+        public int Id { get; set; }
         [Required(ErrorMessage = "Category name is a required field")]
         [MaxLength(10)]
         [DisplayName("Category Name")]

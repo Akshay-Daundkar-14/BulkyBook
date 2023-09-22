@@ -46,7 +46,7 @@ namespace BulkyBook.Areas.Admin.Controllers
         {
             if (id == null || id <= 0) return BadRequest();
 
-            Category category = _unitOfWork.CategoryRepository.Get(c => c.CategoryId == id);
+            Category category = _unitOfWork.CategoryRepository.Get(c => c.Id == id);
 
             if (category == null) return NotFound();
 
@@ -73,7 +73,7 @@ namespace BulkyBook.Areas.Admin.Controllers
         {
             if (id == null || id <= 0) return BadRequest();
 
-            Category category = _unitOfWork.CategoryRepository.Get(c => c.CategoryId == id);
+            Category category = _unitOfWork.CategoryRepository.Get(c => c.Id == id);
 
             if (category == null) return NotFound();
 
@@ -86,7 +86,7 @@ namespace BulkyBook.Areas.Admin.Controllers
         {
             if (id == null || id <= 0) return BadRequest();
 
-            Category category = _unitOfWork.CategoryRepository.Get(c => c.CategoryId == id);
+            Category category = _unitOfWork.CategoryRepository.Get(c => c.Id == id);
 
             if (category == null) return NotFound();
 
